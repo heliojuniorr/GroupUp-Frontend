@@ -16,6 +16,7 @@ export const Brand = styled.aside`
     justify-content: center;
 
     padding: 120px 80px;
+    height: 100vh;
 
     img {
         max-height: 50vh;
@@ -38,9 +39,29 @@ export const Brand = styled.aside`
 
 export const Authentication = styled.main`
     flex: 8;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     button {
+        margin-top: 64px;
+        border-radius: 8px;
+        height: 50px;
+        width: 320px;        
+        font-weight: 500;
         background: #ea4335;
         color: #fff;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        cursor: pointer;
+        border: 0;
+
+        img {
+            margin-right: 8px;
+        }
     }
 `
