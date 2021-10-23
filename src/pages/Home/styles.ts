@@ -19,7 +19,7 @@ export const Brand = styled.aside`
     height: 100vh;
 
     img {
-        max-height: 50vh;
+        max-width: 320px;
     }
 
     strong {
@@ -46,9 +46,8 @@ export const Authentication = styled.main`
 
     button {
         margin-top: 64px;
-        border-radius: 8px;
         height: 50px;
-        width: 320px;        
+        border-radius: 8px;
         font-weight: 500;
         background: #ea4335;
         color: #fff;
@@ -60,8 +59,14 @@ export const Authentication = styled.main`
         cursor: pointer;
         border: 0;
 
+        transition: filter 0.2s;
+
         img {
             margin-right: 8px;
+        }
+
+        &:hover {
+            filter: brightness(0.9);
         }
     }
 `
