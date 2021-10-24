@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "groupup-fda57"
-  }
+    "default": "groupupdev-5808d",
+    "dev": "groupupdev-5808d",
+    "prod": "groupup-fda57"
+  },
+  "targets": {}
 }
