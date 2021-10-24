@@ -2,7 +2,6 @@ import { Container, Brand, Authentication } from "./styles";
 import logoImg from "../../assets/logo.svg"
 import googleIconImg from "../../assets/google-icon.svg"
 import { useAuth } from "../../hooks/useAuth";
-import { useEffect } from "react";
 
 export function Home() {
     const { user, signInWithGoogle } = useAuth()
