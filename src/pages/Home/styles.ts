@@ -38,6 +38,8 @@ export const Brand = styled.aside`
 `
 
 export const Authentication = styled.main`
+    display: flex;
+    flex-direction: column;
     flex: 8;
     height: 100vh;
     display: flex;
@@ -47,6 +49,7 @@ export const Authentication = styled.main`
     button {
         margin-top: 64px;
         height: 50px;
+        width: 320px;
         border-radius: 8px;
         font-weight: 500;
         background: #ea4335;

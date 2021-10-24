@@ -1,8 +1,17 @@
 import { Container, Brand, Authentication } from "./styles";
 import logoImg from "../../assets/logo.svg"
 import googleIconImg from "../../assets/google-icon.svg"
+import { useAuth } from "../../hooks/useAuth";
+import { useEffect } from "react";
 
 export function Home() {
+    const { user, signInWithGoogle } = useAuth()
+
+    async function handleLogon() {
+        if (!user) {
+            await signInWithGoogle()
+        }
+    }
 
     return(
         <>
@@ -14,11 +23,10 @@ export function Home() {
                 </Brand>   
                 <Authentication>
                     <h1>GroupUp(Logo)</h1>
-                    <button>
+                    <button onClick={handleLogon}>
                         <img src={googleIconImg} alt="Logo do Google" />
                         Entre com sua conta do Google
                     </button>
-
                 </Authentication>
             </Container>
         </>

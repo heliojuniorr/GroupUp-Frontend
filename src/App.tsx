@@ -1,11 +1,14 @@
 import { GlobalStyle } from "./styles/global";
 import { Home } from "./pages/Home";
+import { AuthContextProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <>
-      <Home/>  
-      <GlobalStyle/>
+      <AuthContextProvider>
+        <Home/>  
+        <GlobalStyle/>
+      </AuthContextProvider>
     </>  
   );
 }
