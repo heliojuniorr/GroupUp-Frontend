@@ -1,9 +1,6 @@
 import {initializeApp} from 'firebase/app'
 import {GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged} from 'firebase/auth'
 
-console.log("variaveis")
-console.log(process.env)
-
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
