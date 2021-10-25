@@ -17,7 +17,7 @@ export const Authentication = styled.main`
     height: 100vh;
     width: 100%;
 
-    padding: 7.5rem 5rem;
+    padding: 5rem 5rem;
     background: #835afd;
     color: #fff;
 
@@ -57,12 +57,20 @@ export const Authentication = styled.main`
         font: 700 36px 'Poppings', sans-serif;
         line-height: 42px;
         margin-top: 16px;
+
+        @media only screen and (max-width: 480px) {
+            font: 700 24px 'Poppings', sans-serif;
+        }
     }
 
     p {
         font-size: 24px;
         line-height: 32px;
         margin-top: 16px;
-        color: #f8f8f8;
+        
+        @media only screen and (max-width: 480px) {
+            font-size: 16px;
+            line-height: 24px;
+        }
     }
 `
