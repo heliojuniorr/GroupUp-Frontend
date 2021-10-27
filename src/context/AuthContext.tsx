@@ -51,9 +51,10 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
   
         signInWithRedirect(auth, provider)
         getRedirectResult(auth).then((result) => {
-            //const credential = GoogleAuthProvider.credentialFromResult(result);
-            //const token = credential?.accessToken;
             if(result?.user) {
+                //const credential = GoogleAuthProvider.credentialFromResult(result);
+                //const token = credential?.accessToken;
+                //console.log(token)
                 const { displayName, uid } = result.user
                 if(!displayName) {
                     throw new Error('Missing information from Google account.')
