@@ -1,26 +1,32 @@
 import styled from "styled-components";
 
 export const Container = styled.header`
-    background: #835afd;
+    background: #101F33;
     height: 50px;
     display: flex;
-    justify-content: center;
     align-items: center;
 `
 
 export const Nav = styled.nav`
     display: flex;
-    gap: 1rem;
 
     button {
-        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: inherit;
+        color: #ddd;
+        padding: 5px;
         border: 0;
         border-radius: 5px;
+
+        margin-left: 15px;
 
         transition: filter 0.2s;
 
         &:hover {
-            filter: brightness(0.9);
+            filter: brightness(0.8);
         }
     }
 

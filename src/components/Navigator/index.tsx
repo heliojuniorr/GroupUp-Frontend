@@ -5,28 +5,10 @@ import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
-const categories = [
-  {
-    id: 'Grupos',
-    children: [
-      {
-        id: 'Meus grupos',
-        active: true,
-      },
-      { id: 'Novo grupo'},
-      { id: 'Achar grupos'},
-    ],
-  },
-  {
-    id: 'Eventos',
-    children: [
-      { id: 'Meus eventos'},
-      { id: 'Novo evento',},
-      { id: 'Achar eventos',},
-    ],
-  },
-];
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { ChevronButton, ButtonDiv } from './styles';
+import { useState } from 'react';
+import { useHistory } from 'react-router';
 
 const item = {
   py: '2px',
@@ -45,18 +27,47 @@ const paperProps = {
 
 export function Navigator(props: SwipeableDrawerProps) {
   const { ...other } = props;
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const history = useHistory()
+
+  function handleClick(index: number, url: string) {
+      setSelectedIndex(index)
+      history.push(url)
+  }
+
+  const categories = [
+    {
+      id: 'Grupos',
+      children: [
+        { id: 'Meus grupos', index: 0, url: '/mygroups' },
+        { id: 'Novo grupo', index: 1, url: '/newgroup' },
+        { id: 'Achar grupos', index: 2, url: '/grouplist' },
+      ],
+    },
+    {
+      id: 'Eventos',
+      children: [
+        { id: 'Meus eventos', index: 3, url: '/mygroups' },
+        { id: 'Novo evento', index: 4, url: '/mygroups' },
+        { id: 'Achar eventos', index: 5, url: '/mygroups' },
+      ],
+    },
+  ];
 
   return (
     <SwipeableDrawer variant="temporary" {...other} anchor="left" PaperProps={paperProps}>
       <List>
+        <ButtonDiv>
+          <ChevronButton onClick={props.onClose}><ChevronLeftIcon/></ChevronButton>
+        </ButtonDiv>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, active }) => (
+            {children.map(({ id: childId, index, url }) => (
               <ListItem key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton selected={index === selectedIndex} sx={item} onClick={() => {handleClick(index, url)}}>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
               </ListItem>
