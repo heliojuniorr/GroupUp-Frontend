@@ -1,11 +1,12 @@
-import { useHistory } from "react-router";
 import { Container, Nav } from "./styles";
 import { Navigator } from "../Navigator";
 import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
+import { useAuth } from "../../hooks/useAuth";
 
 export function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const {user} = useAuth()
 
     function toggleDrawer() {
         setIsDrawerOpen(!isDrawerOpen)
@@ -13,10 +14,16 @@ export function Header() {
 
     return(
         <Container>
-            <Navigator open={isDrawerOpen} onOpen={toggleDrawer} onClose={toggleDrawer}/>
-            <Nav>
-                <button onClick={toggleDrawer}><MenuIcon/></button>
-            </Nav>
+            {
+                user && (
+                    <>
+                        <Navigator open={isDrawerOpen} onOpen={toggleDrawer} onClose={toggleDrawer}/>
+                        <Nav>
+                            <button onClick={toggleDrawer}><MenuIcon/></button>
+                        </Nav>
+                    </>
+                )
+            }
         </Container>
     )
 }
