@@ -17,7 +17,6 @@ export function EventList() {
 
     return(
         <>
-            <Header/>
             <Container>
                 {
                     user && (

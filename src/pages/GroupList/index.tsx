@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import { Header } from "../../components/Header";
 import { useAuth } from "../../hooks/useAuth";
 import { Container, ListButton } from "./styles";
 import logoImg from '../../assets/logo.svg'
@@ -17,7 +16,6 @@ export function GroupList() {
 
     return(
         <>
-            <Header/>
             <Container>
                 {
                     user && (
