@@ -12,14 +12,14 @@ export const Container = styled.main`
 
 `
 
-export const ListButton = styled.button`
+export const GroupListItem = styled.button`
     margin-right: 32px;
     border-radius: 8px;
     padding: 1rem;
     margin: 1rem 1rem 1rem;
     width: 100%;
     font-weight: 500;
-    background: #835afd;
+    background: var(--backgroundColor);
     color: #fff;
 
     display: flex;
@@ -30,6 +30,8 @@ export const ListButton = styled.button`
     border: 0;
 
     transition: filter 0.2s;
+
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgb(0, 0, 0, 0.12);
 
     &:hover {
         filter: brightness(0.9);

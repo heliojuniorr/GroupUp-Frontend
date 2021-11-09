@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useHistory } from "react-router";
 import { Header } from "../../components/Header";
 import { useAuth } from "../../hooks/useAuth";
-import { Container, ListEvent } from "./styles";
+import { Container, EventListItem } from "./styles";
 import logoImg from '../../assets/logo.svg'
 
 export function EventList() {
@@ -22,7 +22,7 @@ export function EventList() {
                     user && (
                         <ul>
                             <li>
-                                <ListEvent>
+                                <EventListItem>
                                     <div>
                                         <div className="event-header">
                                             <p>Evento de atividades legais</p>
@@ -36,10 +36,10 @@ export function EventList() {
                                     <div>
                                         <img src={logoImg} alt="Imagem" />
                                     </div>
-                                </ListEvent>
+                                </EventListItem>
                             </li>
                             <li>
-                                <ListEvent>
+                                <EventListItem>
                                     <div>
                                         <div className="event-header">
                                             <p>Evento de atividades legais</p>
@@ -53,10 +53,10 @@ export function EventList() {
                                     <div>
                                         <img src={logoImg} alt="Imagem" />
                                     </div>
-                                </ListEvent>
+                                </EventListItem>
                             </li>
                             <li>
-                                <ListEvent>
+                                <EventListItem>
                                     <div>
                                         <div className="event-header">
                                             <p>Evento de atividades legais</p>
@@ -70,7 +70,7 @@ export function EventList() {
                                     <div>
                                         <img src={logoImg} alt="Imagem" />
                                     </div>
-                                </ListEvent>
+                                </EventListItem>
                             </li>
                         </ul>
                     )

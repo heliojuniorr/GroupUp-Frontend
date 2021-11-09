@@ -10,4 +10,12 @@ export const GlobalStyle = createGlobalStyle`
     body, input, button, textarea {
         font: 400 16px 'Roboto', sans-serif;
     }
+
+    body {
+        background: #eaeff1;
+    }
+
+    :root {
+        --backgroundColor: #835afd;
+    }
 `
