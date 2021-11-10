@@ -1,23 +1,29 @@
-import { useHistory } from "react-router";
 import { Container, Nav } from "./styles";
+import { Navigator } from "../Navigator";
+import { useState } from "react";
+import MenuIcon from '@mui/icons-material/Menu';
+import { useAuth } from "../../hooks/useAuth";
 
 export function Header() {
-    const history = useHistory()
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const {user} = useAuth()
 
-    function handleGroupClick() {
-        history.push('/grouplist')
-    }
-
-    function handleEventClick() {
-        history.push('/eventlist')
+    function toggleDrawer() {
+        setIsDrawerOpen(!isDrawerOpen)
     }
 
     return(
         <Container>
-            <Nav>
-                <button onClick={handleGroupClick}>Grupos</button>
-                <button onClick={handleEventClick}>Eventos</button>
-            </Nav>
+            {
+                user && (
+                    <>
+                        <Navigator open={isDrawerOpen} onOpen={toggleDrawer} onClose={toggleDrawer}/>
+                        <Nav>
+                            <button onClick={toggleDrawer}><MenuIcon/></button>
+                        </Nav>
+                    </>
+                )
+            }
         </Container>
     )
 }

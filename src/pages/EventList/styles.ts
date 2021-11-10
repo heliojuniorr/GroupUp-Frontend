@@ -12,7 +12,7 @@ export const Container = styled.main`
 
 `
 
-export const ListEvent = styled.button`
+export const EventListItem = styled.button`
     margin-right: 32px;
     border-radius: 8px;
     padding: 1rem;

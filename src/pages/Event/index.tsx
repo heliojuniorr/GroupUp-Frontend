@@ -1,7 +1,7 @@
 import { useAuth } from "../../hooks/useAuth";
 import { Container } from "./styles";
 
-export function NewEvent() {
+export function Event() {
     const { user } = useAuth()
 
     return(

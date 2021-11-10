@@ -1,14 +1,16 @@
 import { useAuth } from "../../hooks/useAuth";
 import { Container } from "./styles";
 
-export function NewEvent() {
+export function Profile() {
     const { user } = useAuth()
 
     return(
         <Container>
             {
                 user && (
-                    <div>teste</div>
+                    <>
+                        <div>teste</div>
+                    </>
                 )
             }
         </Container>

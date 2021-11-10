@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.main`
-    background: #eee;
+    background: #eaeff1;
     padding: 1rem 2rem 1rem 0rem;
     overflow-y: auto;
 
@@ -35,6 +35,7 @@ export const GroupListItem = styled.button`
 
     &:hover {
         filter: brightness(0.9);
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
 
     > div {
