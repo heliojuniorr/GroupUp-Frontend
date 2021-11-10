@@ -24,13 +24,9 @@ export function Group() {
     }
 
     useEffect(() => {
-        if(!user) {
-            history.push('/')
-            return
-        }
-        else if (params.id) {
+        if (params.id && user) {
             const groupRef = firebaseRef(database)
-            firebaseGet(firebaseChild(groupRef, "group/" + params.id)).then((snapshot) => {
+            firebaseGet(firebaseChild(groupRef, "groups/" + params.id)).then((snapshot) => {
                 if(snapshot.exists()) {
                     const parsedGroup: GroupType = snapshot.val()
                     setGroup(parsedGroup)
@@ -40,7 +36,7 @@ export function Group() {
                 }
             }).catch(error => console.error(error))
         }
-    }, [])
+    }, [user])
 
     return(
         <Container>

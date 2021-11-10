@@ -18,21 +18,19 @@ export function GroupList() {
     }
 
     useEffect(() => {
-        if(!user) {
-            history.push('/')
-            return
-        }
-        else {
+        if(user) {
             const groupRef = firebaseRef(database)
-            firebaseGet(firebaseChild(groupRef, "group/")).then((snapshot) => {
+            firebaseGet(firebaseChild(groupRef, "groups/")).then((snapshot) => {
                 if(snapshot.exists()) {
                     const firebaseGroups: FirebaseGroupsType = snapshot.val()
                     const parsedGroup: GroupType[] = Object.entries(firebaseGroups).map(([key, value]) => {
                         return{
                             id: key,
+                            authorId: value.authorId,
                             name: value.name,
                             description: value.description,
-                            city: value.city
+                            city: value.city,
+                            members: value.members
                         }
                     })
                     setGroups(parsedGroup)
@@ -42,7 +40,7 @@ export function GroupList() {
                 }
             }).catch(error => console.error(error))
         }
-    }, [])
+    }, [user])
 
     return(
         <>

@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { useAuth } from "../../hooks/useAuth";
 import { database, firebaseRef, firebasePush, firebaseChild, firebaseUpdate } from "../../services/firebase"
 import { useState } from "react";
-import { FirebaseGroupsType } from "../../interfaces/types"
+import { FirebaseGroupsType, FirebaseUserType } from "../../interfaces/types"
 
 export function NewGroup() {
     const { user } = useAuth()
@@ -14,22 +14,41 @@ export function NewGroup() {
     const [description, setDescription] = useState('')
 
     function handleCreateGroup() {
-        const groupChild = firebaseChild(firebaseRef(database), "group")
+        const groupChild = firebaseChild(firebaseRef(database), "groups")
         const newGroupKey = firebasePush(groupChild).key
 
         let updates: FirebaseGroupsType = {}
-        updates['/group/' + newGroupKey] = {
-            name,
-            description,
-            city
-        };
+        if(user?.id) {
+            updates['/groups/' + newGroupKey] = {
+                authorId: user.id,
+                name,
+                description,
+                city,
+                members: [user.id]
+            };
+            firebaseUpdate(firebaseRef(database), updates)
+        }
 
-        firebaseUpdate(firebaseRef(database), updates)
-        //firebaseSet(groupRef, {
-        //    name: 'teste2'
-        //})
+        addGroupToUser(newGroupKey || '')
+
+        setName('')
+        setCity('')
+        setDescription('')
     }
 
+    function addGroupToUser(groupKey: string) {
+        const userChild = firebaseChild(firebaseRef(database), "users")
+
+        let updates: FirebaseUserType = {}
+        if(groupKey !== '') {
+            if(user?.id) {
+                updates['/users/' + user.id] = {
+                    groups: [groupKey]
+                };
+                firebaseUpdate(firebaseRef(database), updates)
+            }
+        }
+    }
 
     return(
         <>

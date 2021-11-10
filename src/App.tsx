@@ -9,6 +9,7 @@ import { Header } from "./components/Header";
 import { MyGroups } from "./pages/MyGroups";
 import { Group } from "./pages/Group";
 import { Event } from "./pages/Event";
+import { NewEvent } from "./pages/NewEvent";
 
 function App() {
   return (
@@ -22,8 +23,10 @@ function App() {
             <Route path="/grouplist" exact component={GroupList}/>
             <Route path="/group/:id" exact component={Group}/>
             <Route path="/newgroup" exact component={NewGroup}/>
+            {/*<Route path="/myevents" exact component={MyEvents}/>*/}
             <Route path="/eventlist" exact component={EventList}/>
             <Route path="/event/:id" exact component={Event}/>
+            <Route path="/newevent" exact component={NewEvent}/>
           </Switch>
           <GlobalStyle/>
         </AuthContextProvider>
