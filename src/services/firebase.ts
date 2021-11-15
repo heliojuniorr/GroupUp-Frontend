@@ -1,6 +1,14 @@
 import {initializeApp} from 'firebase/app'
-import {getDatabase, set as firebaseSet, ref as firebaseRef, push as firebasePush, child as firebaseChild, update as firebaseUpdate, get as firebaseGet} from 'firebase/database'
-import {GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged} from 'firebase/auth'
+import {
+  getDatabase, 
+  set as firebaseSet, 
+  ref as firebaseRef, 
+  push as firebasePush, 
+  child as firebaseChild, 
+  update as firebaseUpdate, 
+  get as firebaseGet
+} from 'firebase/database'
+import {GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged, signOut} from 'firebase/auth'
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -21,6 +29,7 @@ const firebaseConfig = {
     signInWithRedirect, 
     getRedirectResult, 
     onAuthStateChanged,
+    signOut,
     database,
     firebaseSet,
     firebaseRef,

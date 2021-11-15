@@ -1,39 +1,37 @@
-import { Container, GroupListItem } from "./styles";
-
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { useAuth } from "../../hooks/useAuth";
-import logoImg from '../../assets/logo.svg'
-import { database, firebaseRef, firebaseChild, firebaseGet } from "../../services/firebase"
-import { GroupType, FirebaseGroupsType } from "../../interfaces/types"
+import { useAuth } from "../../../hooks/useAuth";
+import { Container, EventListItem } from "./styles";
+import logoImg from '../../../assets/logo.svg'
+import { EventType, FirebaseEventType } from "../../../interfaces/types";
+import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
 
-export function GroupList() {
+export function EventList() {
     const { user } = useAuth()
     const history = useHistory()
-    const [groups, setGroups] = useState<GroupType[]>([] as GroupType[])
-
+    const [events, setEvents] = useState<EventType[]>([] as EventType[])
 
     function handleClick(id: string) {
-        history.push('group/' + id)
+        history.push('/event/' + id)
     }
 
     useEffect(() => {
         if(user) {
-            const groupRef = firebaseRef(database)
-            firebaseGet(firebaseChild(groupRef, "groups/")).then((snapshot) => {
+            const eventRef = firebaseRef(database)
+            firebaseGet(firebaseChild(eventRef, "events/")).then((snapshot) => {
                 if(snapshot.exists()) {
-                    const firebaseGroups: FirebaseGroupsType = snapshot.val()
-                    const parsedGroup: GroupType[] = Object.entries(firebaseGroups).map(([key, value]) => {
+                    const firebaseEvents: FirebaseEventType = snapshot.val()
+                    const parsedEvents: EventType[] = Object.entries(firebaseEvents).map(([key, value]) => {
                         return{
                             id: key,
-                            authorId: value.authorId,
+                            groupId: value.groupId,
                             name: value.name,
                             description: value.description,
                             city: value.city,
                             members: value.members
                         }
                     })
-                    setGroups(parsedGroup)
+                    setEvents(parsedEvents)
                 }
                 else {
                     console.log("No data available!")
@@ -48,29 +46,29 @@ export function GroupList() {
                 {
                     user && (
                         <ul>
-                            <li>
-                                {
-                                    groups?.map((value) => {
-                                        return(
-                                            <GroupListItem onClick={() => {handleClick(value.id)}}>
-                                               <div>
-                                                    <div className="group-header">
+                            {
+                                events.map((value) => {
+                                    return(
+                                        <li>
+                                            <EventListItem onClick={() => {handleClick(value.id)}}>
+                                                <div>
+                                                    <div className="event-header">
                                                         <p>{value.name}</p>
                                                         <p>Local: {value.city}</p>
                                                         <p>Membros: 12</p>
                                                     </div> 
-                                                    <div className="group-description">
+                                                    <div className="event-description">
                                                         <p>{value.description}</p>
                                                     </div> 
                                                 </div>
                                                 <div>
                                                     <img src={logoImg} alt="Imagem" />
-                                                </div> 
-                                            </GroupListItem>
-                                        )
-                                    })
-                                }
-                            </li>
+                                                </div>
+                                            </EventListItem>
+                                        </li>
+                                    )
+                                })
+                            }
                         </ul>
                     )
                 }

@@ -1,22 +1,11 @@
 import styled from "styled-components";
 
-export const Container = styled.main`
-    background: #eee;
-    padding: 1rem 2rem 1rem 0rem;
-    overflow-y: auto;
-
-    li {
-        list-style: none;
-        margin-left: 0;
-    }
-
+export const Container = styled.div`
 `
 
 export const GroupListItem = styled.button`
-    margin-right: 32px;
     border-radius: 8px;
     padding: 1rem;
-    margin: 1rem 1rem 1rem;
     width: 100%;
     font-weight: 500;
     background: var(--backgroundColor);
@@ -25,16 +14,20 @@ export const GroupListItem = styled.button`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    cursor: pointer;
     border: 0;
 
     transition: filter 0.2s;
 
     box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgb(0, 0, 0, 0.12);
 
-    &:hover {
+    :not(:disabled) {
+        margin: 1rem;
+        cursor: pointer;
+    }
+
+    &:hover:not(:disabled) {
         filter: brightness(0.9);
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
 
     > div {

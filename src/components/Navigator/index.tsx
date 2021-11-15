@@ -52,6 +52,13 @@ export function Navigator(props: SwipeableDrawerProps) {
         { id: 'Achar eventos', index: 5, url: '/eventlist' },
       ],
     },
+    {
+      id: 'Usuário',
+      children: [
+        { id: 'Perfil', index: 6, url: '/profile'},
+        { id: 'Sair', index: 7, url: '/logout'},
+      ]
+    }
   ];
 
   return (

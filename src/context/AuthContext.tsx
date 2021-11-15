@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react"
 import { useHistory } from "react-router"
-import { GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged } from "../services/firebase"
+import { GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged, signOut } from "../services/firebase"
 
 type User = {
     id: string ;
@@ -10,6 +10,7 @@ type User = {
 type AuthContextType = {
     user: User | undefined;
     signInWithGoogle: () => Promise<void>;
+    signOutWithGoogle: () => Promise<void>;
 }
 
 type AuthContextProviderProps = {
@@ -75,8 +76,17 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         });
     }
 
+    async function signOutWithGoogle() {
+      const auth = getAuth();
+      signOut(auth).then(() => {
+        history.push('/')
+      }).catch((error) => {
+        console.log(error)
+      });
+    }
+
     return (
-        <AuthContext.Provider value={{user, signInWithGoogle}}>
+        <AuthContext.Provider value={{user, signInWithGoogle, signOutWithGoogle}}>
             {props.children}
         </AuthContext.Provider>
 

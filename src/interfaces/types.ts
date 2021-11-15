@@ -4,7 +4,8 @@ export type GroupType = {
     name: string,
     description: string,
     city: string,
-    members: string[]
+    members: string[],
+    events?: string[]
 }
 
 export type FirebaseGroupsType = Record<string, {
@@ -12,15 +13,19 @@ export type FirebaseGroupsType = Record<string, {
     name: string,
     description: string,
     city: string,
-    members: string[]
+    members: string[],
+    events?: string[]
 }>
 
 export type UserType = {
+    id?: string,
+    name?: string,
     groups?: string[],
     events?: string[]
 }
 
 export type FirebaseUserType = Record<string, {
+    name?: string,
     groups?: string[]
     events?: string[]
 }>
@@ -41,3 +46,12 @@ export type FirebaseEventType = Record<string, {
     groupId: string,
     members: string[]
 }>
+
+export type ParamsType = {
+    id: string
+}
+
+export type GroupCardParams = {
+    group: GroupType,
+    disabled?: boolean
+}
