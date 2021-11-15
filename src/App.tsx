@@ -12,6 +12,7 @@ import { Event } from "./pages/eventPages/Event";
 import { NewEvent } from "./pages/eventPages/NewEvent";
 import { LogOut } from "./components/LogOut";
 import { Profile } from "./pages/Profile";
+import { MyEvents } from "./pages/eventPages/MyEvents";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
             <Route path="/grouplist" exact component={GroupList}/>
             <Route path="/group/:id" exact component={Group}/>
             <Route path="/newgroup" exact component={NewGroup}/>
-            {/*<Route path="/myevents" exact component={MyEvents}/>*/}
+            <Route path="/myevents" exact component={MyEvents}/>
             <Route path="/eventlist" exact component={EventList}/>
             <Route path="/event/:id" exact component={Event}/>
             <Route path="/newevent" exact component={NewEvent}/>

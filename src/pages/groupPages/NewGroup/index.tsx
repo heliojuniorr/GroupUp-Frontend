@@ -5,10 +5,12 @@ import InputLabel from '@mui/material/InputLabel';
 import { useAuth } from "../../../hooks/useAuth";
 import { database, firebaseRef, firebasePush, firebaseChild, firebaseUpdate, firebaseGet } from "../../../services/firebase"
 import { useState } from "react";
-import { FirebaseGroupsType, FirebaseUserType, UserType } from "../../../interfaces/types"
+import { FirebaseGroupsType } from "../../../interfaces/types"
+import { useGroup } from "../../../hooks/useGroup";
 
 export function NewGroup() {
     const { user } = useAuth()
+    const { addGroupToUser } = useGroup()
     const [name, setName] = useState('')
     const [city, setCity] = useState('')
     const [description, setDescription] = useState('')
@@ -34,37 +36,6 @@ export function NewGroup() {
         setName('')
         setCity('')
         setDescription('')
-    }
-
-    function addGroupToUser(groupKey: string) {
-        const userChild = firebaseChild(firebaseRef(database), "users/" + user?.id)
-        let updates: FirebaseUserType = {}
-
-        firebaseGet(userChild).then((snapshot) => {
-            if(snapshot.exists()) {
-                const parsedUser: UserType = snapshot.val()
-                
-                if(groupKey !== '') {
-                    if(user?.id) {
-                        updates['/users/' + user.id] = {
-                            ...parsedUser,
-                            name: user.name,
-                            groups: parsedUser?.groups ? [...parsedUser.groups, groupKey] : [groupKey]
-                        };
-                        firebaseUpdate(firebaseRef(database), updates)
-                    }
-                }
-            }
-            else if(groupKey !== ''){
-                if(user?.id) {
-                    updates['/users/' + user.id] = {
-                        name: user.name,
-                        groups: [groupKey]
-                    };
-                    firebaseUpdate(firebaseRef(database), updates)
-                }
-            }
-        }).catch(error => console.error(error))
     }
 
     return(

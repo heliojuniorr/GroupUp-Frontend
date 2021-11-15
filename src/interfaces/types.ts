@@ -55,3 +55,12 @@ export type GroupCardParams = {
     group: GroupType,
     disabled?: boolean
 }
+
+export type EventCardParams = {
+    event: EventType,
+    disabled?: boolean
+}
+
+export type MembersCardParams = {
+    members: UserType[]
+}

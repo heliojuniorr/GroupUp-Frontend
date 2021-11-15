@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
-import { Container, EventListItem } from "./styles";
+import { Container } from "./styles";
 import logoImg from '../../../assets/logo.svg'
 import { EventType, FirebaseEventType } from "../../../interfaces/types";
 import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
+import { EventCard } from "../../../components/EventCard";
 
 export function EventList() {
     const { user } = useAuth()
@@ -42,37 +43,19 @@ export function EventList() {
 
     return(
         <>
-            <Container>
-                {
-                    user && (
-                        <ul>
-                            {
-                                events.map((value) => {
-                                    return(
-                                        <li>
-                                            <EventListItem onClick={() => {handleClick(value.id)}}>
-                                                <div>
-                                                    <div className="event-header">
-                                                        <p>{value.name}</p>
-                                                        <p>Local: {value.city}</p>
-                                                        <p>Membros: 12</p>
-                                                    </div> 
-                                                    <div className="event-description">
-                                                        <p>{value.description}</p>
-                                                    </div> 
-                                                </div>
-                                                <div>
-                                                    <img src={logoImg} alt="Imagem" />
-                                                </div>
-                                            </EventListItem>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    )
-                }
-            </Container>
+            {
+                user && (
+                    <Container>
+                        {
+                            events.map((value) => {
+                                return(
+                                    <EventCard event={value}/>
+                                )
+                            })
+                        }
+                    </Container>
+                )
+            }
         </>
     )
 }

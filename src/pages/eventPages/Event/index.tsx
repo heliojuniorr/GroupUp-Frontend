@@ -1,18 +1,21 @@
 import { useAuth } from "../../../hooks/useAuth";
-import { Container, Description, MembersList, MembersListItem, ReturnButton } from "./styles";
+import { Container, MembersList, MembersListItem, ReturnButton } from "./styles";
 import logoImg from '../../../assets/logo.svg'
 import Divider from '@mui/material/Divider'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-import { EventType, ParamsType } from "../../../interfaces/types"
+import { EventType, ParamsType, UserType } from "../../../interfaces/types"
 import { useHistory, useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
+import { EventCard } from "../../../components/EventCard";
+import { MembersCard } from "../../../components/MembersCard";
 
 export function Event() {
     const { user } = useAuth()
     const history = useHistory()
     const params: ParamsType = useParams()
     const [event, setEvent] = useState<EventType>({} as EventType)
+    const [members, setMembers] = useState<UserType[]>([] as UserType[])
 
     function handleReturn() {
         history.goBack()
@@ -20,11 +23,28 @@ export function Event() {
 
     useEffect(() => {
         if (params.id && user) {
-            const eventRef = firebaseRef(database)
-            firebaseGet(firebaseChild(eventRef, "events/" + params.id)).then((snapshot) => {
+            const dbRef = firebaseRef(database)
+            firebaseGet(firebaseChild(dbRef, "events/" + params.id)).then((snapshot) => {
                 if(snapshot.exists()) {
                     const parsedEvent: EventType = snapshot.val()
                     setEvent(parsedEvent)
+                    let membersTemp: UserType[] = []
+
+                    parsedEvent.members.forEach((memberId) => {
+                        firebaseGet(firebaseChild(dbRef, "users/" + memberId)).then((snapshot) => {
+                            if(snapshot.exists()) {
+                                const parsedMember: UserType = snapshot.val()
+                                membersTemp = [...membersTemp, parsedMember]
+                            }
+                            else {
+                                console.log("No data available!")
+                            }
+
+                            if(parsedEvent?.members && parsedEvent.members[parsedEvent.members?.length - 1] === memberId) {
+                                setMembers(membersTemp)
+                            }
+                        }).catch(error => console.error(error))
+                    })
                 }
                 else {
                     console.log("No data available!")
@@ -39,48 +59,10 @@ export function Event() {
                 user && (
                     <>
                         <ReturnButton onClick={handleReturn}><KeyboardBackspaceIcon color="secondary" fontSize="large"/></ReturnButton>
-                        <Description>
-                            <div>
-                                <div className="event-header">
-                                    <p>{event.name}</p>
-                                    <p>Local: {event.city}</p>
-                                    <p>Membros: 12</p>
-                                </div> 
-                                <div className="event-description">
-                                    <p>{event.description}</p>
-                                </div> 
-                            </div>
-                            <div>
-                                <img src={logoImg} alt="Imagem" />
-                            </div>
-                        </Description>
-                        <Divider/>
+                        <EventCard event={event} disabled={true}/>
+                        <Divider className='divider'/>
                         <div>
-                            <MembersList>
-                            <p>Membros</p>
-                                <ul>
-                                    <MembersListItem>
-                                        <div className="member-header">
-                                            <p>Evento de atividades legais</p>
-                                            <p>Local: SP</p>
-                                            <p>Membros: 12</p>
-                                        </div> 
-                                        <div>
-                                            <img src={logoImg} alt="Imagem" />
-                                        </div>
-                                    </MembersListItem>
-                                    <MembersListItem>
-                                        <div className="member-header">
-                                            <p>Evento de atividades legais</p>
-                                            <p>Local: SP</p>
-                                            <p>Membros: 12</p>
-                                        </div> 
-                                        <div>
-                                            <img src={logoImg} alt="Imagem" />
-                                        </div>
-                                    </MembersListItem>
-                                </ul>
-                            </MembersList>
+                            <MembersCard members={members}/>
                         </div>
                     </>
                 )

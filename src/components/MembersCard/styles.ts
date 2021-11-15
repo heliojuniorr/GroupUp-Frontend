@@ -1,43 +1,6 @@
 import styled from 'styled-components'
 
-export const Container = styled.main`
-    padding: 1rem;
-
-    .divider {
-        margin: 1rem 0;
-    }
-`
-
-export const ButtonsContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-`
-
-export const ListsContainer = styled.div`
-    display: flex;
-
-    @media only screen and (max-width: 480px) {
-        flex-direction: column;
-    }
-`
-
-export const ReturnButton = styled.button`
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    border-radius: 5px;
-    border: 0;
-    cursor: pointer;
-
-    transition: filter 0.2s;
-
-    &:hover {
-        filter: brightness(0.85);
-    }
-`
-
-export const EventList = styled.div`
+export const MembersList = styled.div`
     margin: 1rem 1rem 1rem 0;
     width: 30rem;
 
@@ -69,7 +32,7 @@ export const EventList = styled.div`
     }
 `
 
-export const EventListItem = styled.button`
+export const MembersListItem = styled.button`
     border-radius: 8px;
     padding: 1rem;
     margin: 5px 1rem 1rem 0;
@@ -104,7 +67,7 @@ export const EventListItem = styled.button`
         }
     }
 
-    .event-header {
+    .member-header {
             p {
                 font: 500 24px 'Roboto', sans-serif;
 
@@ -116,9 +79,5 @@ export const EventListItem = styled.button`
 
     img {
         height: 2rem;
-    }   
-` 
-
-export const Chat = styled.div`
-
+    }
 `
