@@ -51,7 +51,7 @@ export function MyEvents() {
                         {
                             events.map((value) => {
                                 return(
-                                    <EventCard event={value}/>
+                                    <EventCard key={value.id} event={value}/>
                                 )
                             })
                         }

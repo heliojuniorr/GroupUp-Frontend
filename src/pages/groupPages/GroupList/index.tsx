@@ -43,7 +43,7 @@ export function GroupList() {
                         {
                             groups?.map((value) => {
                                 return(
-                                    <GroupCard group={value}/>
+                                    <GroupCard key={value.id} group={value}/>
                                 )
                             })
                         }

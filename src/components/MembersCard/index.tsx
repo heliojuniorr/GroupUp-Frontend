@@ -15,9 +15,9 @@ export function MembersCard({members}: MembersCardParams) {
                         <ul>
                             {
                                 members.length > 0 ? (
-                                    members.map((value) => {
+                                    members.map((value, index) => {
                                         return(
-                                            <MembersListItem>
+                                            <MembersListItem key={index}>
                                                 <div className="member-header">
                                                     <p>{value?.name}</p>
                                                 </div> 

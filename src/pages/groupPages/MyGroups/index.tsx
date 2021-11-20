@@ -51,7 +51,7 @@ export function MyGroups() {
                         {
                             groups.map((value) => {
                                 return(
-                                    <GroupCard group={value}/>
+                                    <GroupCard key={value.id} group={value}/>
                                 )
                             })
                         }

@@ -139,6 +139,7 @@ export function NewEvent() {
                                 groupList.map((value) => {
                                     return(
                                         <MenuItem 
+                                            key={value.id}
                                             value={value.id} 
                                             onClick={() => {
                                                 setSelectedGroup({

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const MembersList = styled.div`
     margin: 1rem 1rem 1rem 0;
-    width: 30rem;
+    width: 30%;
 
     @media only screen and (max-width: 480px) {
         width: 100%;
