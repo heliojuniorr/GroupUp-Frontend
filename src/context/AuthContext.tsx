@@ -3,8 +3,9 @@ import { useHistory } from "react-router"
 import { GoogleAuthProvider, signInWithRedirect, getAuth, getRedirectResult, onAuthStateChanged, signOut } from "../services/firebase"
 
 type User = {
-    id: string ;
+    id: string;
     name: string;
+    image: string;
 }
   
 type AuthContextType = {
@@ -34,6 +35,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
           setUser({
             id: uid,
             name: displayName,
+            image: 'padrao'
           })
           if(history.location.pathname === '/') {
             history.push('/mygroups')
@@ -63,6 +65,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
                 setUser({
                     id: uid,
                     name: displayName,
+                    image: 'padrao'
                 })
                 if(history.location.pathname === '/') {
                   history.push('/mygroups')

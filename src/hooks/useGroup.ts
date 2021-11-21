@@ -1,4 +1,4 @@
-import { FirebaseGroupsType, FirebaseUserType, GroupType, UserType } from "../interfaces/types";
+import { FirebaseGroupsType, FirebaseMessageType, FirebaseUserType, GroupType, MessageType, UserType } from "../interfaces/types";
 import { firebaseChild, firebaseRef, database, firebaseGet, firebaseUpdate, firebasePush } from "../services/firebase";
 import { useAuth } from "./useAuth";
 
@@ -118,12 +118,26 @@ export function useGroup() {
         }).catch(error => console.error(error))
     }
 
+    function sendMessageToGroup(message: MessageType, groupId: string) {
+        const messagesChild = firebaseChild(firebaseRef(database), `groups/${groupId}/messages/`)
+        const newMessageId = firebasePush(messagesChild).key
+
+        let updates: FirebaseMessageType = {}
+        if(user?.name) {
+            updates[`groups/${groupId}/messages/${newMessageId}`] = {
+                ...message
+            };
+            updateFirebase(updates)
+        }
+    }
+
     return { 
         addGroupToUser, 
         addUserToGroup, 
         removeGroupFromUser, 
         removeUserFromGroup, 
         createGroup, 
-        updateFirebase 
+        updateFirebase,
+        sendMessageToGroup
     }
 }

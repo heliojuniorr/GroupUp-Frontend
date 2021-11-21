@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { Button, MenuItem } from "@mui/material";
 import { useAuth } from "../../../hooks/useAuth";
 import { Dispatch, useState } from "react";
-import { images, TextFieldType } from "../../../interfaces/types"
+import { iconImages, TextFieldType } from "../../../interfaces/types"
 import { useGroup } from "../../../hooks/useGroup";
 
 export function NewGroup() {
@@ -86,7 +86,7 @@ export function NewGroup() {
                             >
                                 <MenuItem value="None" selected>None</MenuItem>
                                 {
-                                    Object.entries(images).map((value) => {
+                                    Object.entries(iconImages).map((value) => {
                                         return(
                                             <MenuItem 
                                                 key={value[0]}

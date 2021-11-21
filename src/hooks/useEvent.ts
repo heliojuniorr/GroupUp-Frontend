@@ -1,4 +1,4 @@
-import { FirebaseEventType, FirebaseGroupsType, FirebaseUserType, GroupListType, GroupType, UserType } from "../interfaces/types"
+import { FirebaseEventType, FirebaseGroupsType, FirebaseMessageType, FirebaseUserType, GroupListType, GroupType, MessageType, UserType } from "../interfaces/types"
 import { database, firebaseChild, firebaseGet, firebasePush, firebaseRef, firebaseUpdate } from "../services/firebase"
 import { useAuth } from "./useAuth"
 
@@ -9,7 +9,7 @@ export function useEvent() {
     const groupChild = (groupId?: string) => firebaseChild(firebaseRef(database), `groups/${groupId ?? ""}`)
     const updateFirebase = (updates: any) => firebaseUpdate(firebaseRef(database), updates) 
 
-    function createEvent(name: string, description: string, group: GroupListType) {
+    function createEvent(name: string, description: string, group: GroupListType, image: string) {
         const newEventKey = firebasePush(eventChild()).key
 
         firebaseGet(groupChild(group.id)).then((snapshot) => {
@@ -33,12 +33,13 @@ export function useEvent() {
                             description,
                             city: parsedGroup.city,
                             groupId : group.id,
+                            image,
                             members: [user.id]
                         };
                         updateFirebase(eventUpdates)
                     }
                 }
-                addEventToUsers(newEventKey || '')
+                addEventToUser(newEventKey || '')
             }
             else {
                 console.error("No data available!")
@@ -46,7 +47,7 @@ export function useEvent() {
         }).catch(error => console.error(error))
     }
 
-    function addEventToUsers(eventKey: string) {
+    function addEventToUser(eventKey: string) {
         firebaseGet(userChild).then((snapshot) => {
             if(snapshot.exists()) {
                 const parsedUser: UserType = snapshot.val()
@@ -69,5 +70,91 @@ export function useEvent() {
         }).catch(error => console.error(error))
     }
 
-    return { createEvent, addEventToUsers }
+    function removeEventFromUser(eventKey: string) {        
+        let updates: FirebaseUserType = {}
+
+        firebaseGet(userChild).then((snapshot) => {
+            if(snapshot.exists()) {
+                const parsedUser: UserType = snapshot.val()
+                
+                if(eventKey !== '' && user?.id) {
+                    parsedUser?.events && parsedUser.events.splice(parsedUser.events.indexOf(eventKey), 1)
+                    updates['/users/' + user.id] = {
+                        ...parsedUser,
+                        name: user.name,
+                        events: parsedUser?.events ? [...parsedUser.events] : []
+                    };
+                    updateFirebase(updates)
+                }
+            }
+            else {
+                console.error("No data available!")
+            }
+        }).catch(error => console.error(error))
+    }
+
+    function sendMessageToEvent(message: MessageType, eventId: string) {
+        const messagesChild = firebaseChild(firebaseRef(database), `events/${eventId}/messages/`)
+            const newMessageId = firebasePush(messagesChild).key
+
+            let updates: FirebaseMessageType = {}
+            if(user?.name) {
+                updates[`events/${eventId}/messages/${newMessageId}`] = {
+                    ...message
+                };
+                updateFirebase(updates)
+            }
+    }
+
+    function addUserToEvent(eventKey: string) {        
+        let updates: FirebaseGroupsType = {}
+
+        firebaseGet(eventChild(eventKey)).then((snapshot) => {
+            if(snapshot.exists()) {
+                const parsedGroup: GroupType = snapshot.val()
+                
+                if(eventKey !== '' && user?.id) {
+                    updates['/events/' + eventKey] = {
+                        ...parsedGroup,
+                        members: parsedGroup?.members ? [...parsedGroup.members, user.id] : [user.id]
+                    };
+                    updateFirebase(updates)
+                }
+            }
+            else {
+                console.error("No data available!")
+            }
+        }).catch(error => console.error(error))
+    }
+
+    function removeUserFromEvent(eventKey: string) {        
+        let updates: FirebaseGroupsType = {}
+
+        firebaseGet(eventChild(eventKey)).then((snapshot) => {
+            if(snapshot.exists()) {
+                const parsedGroup: GroupType = snapshot.val()
+                
+                if(eventKey !== '' && user?.id) {
+                    parsedGroup?.members && parsedGroup.members.splice(parsedGroup.members.indexOf(user.id), 1)
+                    updates['/events/' + eventKey] = {
+                        ...parsedGroup,
+                        members: parsedGroup?.members ? [...parsedGroup.members] : []
+                    };
+                    updateFirebase(updates)
+                }
+            }
+            else {
+                console.error("No data available!")
+            }
+        }).catch(error => console.error(error))
+    }
+
+    return { 
+        createEvent, 
+        addEventToUser, 
+        removeEventFromUser,
+        addUserToEvent,
+        removeUserFromEvent,
+        sendMessageToEvent 
+    }
 }

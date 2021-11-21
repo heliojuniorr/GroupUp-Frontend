@@ -4,10 +4,9 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router"
 import { useAuth } from "../../../hooks/useAuth"
-import logoImg from '../../../assets/logo.svg'
 import Divider from '@mui/material/Divider'
-import { database, firebaseRef, firebaseChild, firebaseGet, firebasePush, firebaseUpdate } from "../../../services/firebase"
-import { GroupType, EventType, UserType, ParamsType, MessageType, FirebaseGroupsType, FirebaseMessageType } from "../../../interfaces/types"
+import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
+import { GroupType, EventType, UserType, ParamsType, MessageType, iconImages } from "../../../interfaces/types"
 import { GroupCard } from "../../../components/GroupCard"
 import { Button, TextField } from "@mui/material"
 import { useGroup } from "../../../hooks/useGroup"
@@ -16,7 +15,7 @@ import { Message } from "../../../components/Message"
 
 export function Group() {
     const { user } = useAuth()
-    const { addGroupToUser, addUserToGroup, removeGroupFromUser, removeUserFromGroup } = useGroup()
+    const { addGroupToUser, addUserToGroup, removeGroupFromUser, removeUserFromGroup, sendMessageToGroup } = useGroup()
     const history = useHistory()
     const params: ParamsType = useParams()
     const [message, setMessage] = useState<MessageType>({} as MessageType)
@@ -70,16 +69,7 @@ export function Group() {
 
     function handleSendMessage(event: any) {
         if(event.keyCode === 13) {
-            const messagesChild = firebaseChild(firebaseRef(database), `groups/${group.id}/messages/`)
-            const newMessageId = firebasePush(messagesChild).key
-
-            let updates: FirebaseMessageType = {}
-            if(user?.name) {
-                updates[`groups/${group.id}/messages/${newMessageId}`] = {
-                    ...message
-                };
-                firebaseUpdate(firebaseRef(database), updates)
-            }
+            sendMessageToGroup(message, group.id)
 
             setMessage({
                 ...message,
@@ -218,7 +208,8 @@ export function Group() {
                                                             <p>Membros: {value.members?.length}</p>
                                                         </div> 
                                                         <div>
-                                                            <img src={logoImg} alt="Imagem" />
+                                                            {/*@ts-ignore*/}
+                                                            <img src={iconImages[value.image]} alt="Imagem"/>
                                                         </div>
                                                     </EventListItem>
                                                 )

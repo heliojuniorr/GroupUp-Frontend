@@ -4,10 +4,12 @@ import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../serv
 import { useEffect, useState } from "react";
 import { EventType, UserType } from "../../../interfaces/types";
 import { EventCard } from "../../../components/EventCard";
+import { TextField } from "@mui/material";
 
 export function MyEvents() {
     const { user } = useAuth()
     const [events, setEvents] = useState<EventType[]>([] as EventType[])
+    const [filter, setFilter] = useState('')
 
     useEffect(() => {
         if(user) {
@@ -48,12 +50,25 @@ export function MyEvents() {
             {
                 user && (
                     <Container>
+                        <TextField 
+                            className={"filter-field"}
+                            type="text" 
+                            label="Buscar" 
+                            value={filter} 
+                            onChange={(e) => {setFilter(e.target.value)}}
+                        /> 
                         {
-                            events.map((value) => {
-                                return(
-                                    <EventCard key={value.id} event={value}/>
-                                )
-                            })
+                            events.length > 0 ? (
+                                events.filter(value => value.name.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.description.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.city.toLowerCase().includes(filter.toLowerCase())).map((value) => {
+                                    return(
+                                        <EventCard key={value.id} event={value}/>
+                                    )
+                                })
+                            ) : (
+                                <p className={'default-message'}>Nenhum evento encontrado. Comece criando o seu evento ou entrando em um grupo com eventos.</p>
+                            )
                         }
                     </Container>
                 )

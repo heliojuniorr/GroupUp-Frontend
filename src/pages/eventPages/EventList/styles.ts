@@ -9,4 +9,12 @@ export const Container = styled.main`
         list-style: none;
         margin-left: 0;
     }
+
+    .default-message {
+        padding: 1rem;
+    }
+
+    .filter-field {
+        margin-left: 1rem;
+    }
 `

@@ -1,7 +1,6 @@
 import { useAuth } from "../../hooks/useAuth"
-import { MembersCardParams } from "../../interfaces/types"
+import { MembersCardParams, profileImages } from "../../interfaces/types"
 import { MembersList, MembersListItem } from "./styles"
-import logoImg from '../../assets/logo.svg'
 
 export function MembersCard({members}: MembersCardParams) {
     const { user } = useAuth()
@@ -22,7 +21,8 @@ export function MembersCard({members}: MembersCardParams) {
                                                     <p>{value?.name}</p>
                                                 </div> 
                                                 <div>
-                                                    <img src={logoImg} alt="Imagem" />
+                                                    {/*@ts-ignore*/}
+                                                    <img src={profileImages[value.image]} alt="Ícone"/>
                                                 </div>
                                             </MembersListItem>
                                         )

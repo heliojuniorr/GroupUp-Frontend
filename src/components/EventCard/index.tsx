@@ -1,8 +1,7 @@
 import { useHistory } from "react-router"
 import { useAuth } from "../../hooks/useAuth"
-import { EventCardParams } from "../../interfaces/types"
+import { EventCardParams, iconImages } from "../../interfaces/types"
 import { Container, EventListItem } from "./styles"
-import logoImg from '../../assets/logo.svg'
 
 export function EventCard({ event, disabled = false }: EventCardParams) {
     const { user } = useAuth()
@@ -29,7 +28,8 @@ export function EventCard({ event, disabled = false }: EventCardParams) {
                                 </div> 
                             </div>
                             <div>
-                                <img src={logoImg} alt="Imagem" />
+                                {/*@ts-ignore*/}
+                                <img src={iconImages[event.image]} alt="Ícone"/>
                             </div> 
                         </EventListItem>
                     </Container>

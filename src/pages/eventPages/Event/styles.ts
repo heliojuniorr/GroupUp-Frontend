@@ -16,6 +16,12 @@ export const Container = styled.main`
     }
 `
 
+export const ButtonsContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+`
+
 export const ListsContainer = styled.div`
     display: flex;
 

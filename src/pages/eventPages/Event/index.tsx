@@ -1,5 +1,5 @@
 import { useAuth } from "../../../hooks/useAuth";
-import { Chat, Container, ListsContainer, MembersList, MembersListItem, ReturnButton } from "./styles";
+import { ButtonsContainer, Chat, Container, ListsContainer, MembersList, MembersListItem, ReturnButton } from "./styles";
 import logoImg from '../../../assets/logo.svg'
 import Divider from '@mui/material/Divider'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
@@ -9,11 +9,13 @@ import { useState, useEffect } from "react";
 import { database, firebaseRef, firebaseChild, firebaseGet, firebasePush, firebaseUpdate } from "../../../services/firebase"
 import { EventCard } from "../../../components/EventCard";
 import { MembersCard } from "../../../components/MembersCard";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Message } from "../../../components/Message"
+import { useEvent } from "../../../hooks/useEvent";
 
 export function Event() {
     const { user } = useAuth()
+    const { sendMessageToEvent, addEventToUser, addUserToEvent, removeEventFromUser, removeUserFromEvent } = useEvent()
     const history = useHistory()
     const params: ParamsType = useParams()
     const [event, setEvent] = useState<EventType>({} as EventType)
@@ -24,6 +26,31 @@ export function Event() {
 
     function handleReturn() {
         history.goBack()
+    }
+
+    function handleEntryEvent() {
+        if(!isMember && event && user?.name) {
+            addEventToUser(event.id)
+            addUserToEvent(event.id)
+            setIsMember(true)
+            setMembers([
+                ...members,
+                {
+                    name: user.name
+                }
+            ])
+        }
+    }
+
+    function handleLeaveEvent() {
+        if(isMember && event) {
+            setIsMember(false)
+            removeEventFromUser(event.id)
+            removeUserFromEvent(event.id)
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
+        }
     }
 
     function handleMessageChange(event: any) {
@@ -37,17 +64,7 @@ export function Event() {
 
     function handleSendMessage(e: any) {
         if(e.keyCode === 13) {
-            console.log(`events/${event.id}/messages/`)
-            const messagesChild = firebaseChild(firebaseRef(database), `events/${event.id}/messages/`)
-            const newMessageId = firebasePush(messagesChild).key
-
-            let updates: FirebaseMessageType = {}
-            if(user?.name) {
-                updates[`events/${event.id}/messages/${newMessageId}`] = {
-                    ...message
-                };
-                firebaseUpdate(firebaseRef(database), updates)
-            }
+            sendMessageToEvent(message, event.id)
 
             setMessage({
                 ...message,
@@ -113,7 +130,7 @@ export function Event() {
 
                     let isMemberTemp = false
                     let membersTemp: UserType[] = []
-                    parsedEvent.members.forEach((memberId) => {
+                    parsedEvent.members?.forEach((memberId) => {
                         firebaseGet(firebaseChild(dbRef, "users/" + memberId)).then((snapshot) => {
                             if(snapshot.exists()) {
                                 memberId === user.id && (isMemberTemp = true)
@@ -143,7 +160,12 @@ export function Event() {
             {
                 user && (
                     <>
-                        <ReturnButton onClick={handleReturn}><KeyboardBackspaceIcon color="secondary" fontSize="large"/></ReturnButton>
+                        <ButtonsContainer>
+                            <ReturnButton onClick={handleReturn}><KeyboardBackspaceIcon color="secondary" fontSize="large"/></ReturnButton>
+                            {
+                                !isMember ? <Button variant="contained" onClick={handleEntryEvent}>Entrar</Button> : <Button variant="contained" onClick={handleLeaveEvent}>Sair</Button>
+                            }
+                        </ButtonsContainer>
                         <EventCard event={event} disabled={true}/>
                         <Divider className='divider'/>
                         <ListsContainer>

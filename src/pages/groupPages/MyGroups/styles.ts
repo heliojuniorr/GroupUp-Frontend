@@ -8,4 +8,8 @@ export const Container = styled.main`
     .default-message {
         padding: 1rem;
     }
+
+    .filter-field {
+        margin-left: 1rem;
+    }
 `

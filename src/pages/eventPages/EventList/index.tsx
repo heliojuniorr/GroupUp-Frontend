@@ -2,19 +2,16 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { Container } from "./styles";
-import logoImg from '../../../assets/logo.svg'
 import { EventType, FirebaseEventType } from "../../../interfaces/types";
 import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
 import { EventCard } from "../../../components/EventCard";
+import { TextField } from "@mui/material";
 
 export function EventList() {
     const { user } = useAuth()
     const history = useHistory()
     const [events, setEvents] = useState<EventType[]>([] as EventType[])
-
-    function handleClick(id: string) {
-        history.push('/event/' + id)
-    }
+    const [filter, setFilter] = useState('')
 
     useEffect(() => {
         if(user) {
@@ -29,6 +26,7 @@ export function EventList() {
                             name: value.name,
                             description: value.description,
                             city: value.city,
+                            image: value.image,
                             members: value.members
                         }
                     })
@@ -46,12 +44,25 @@ export function EventList() {
             {
                 user && (
                     <Container>
+                        <TextField 
+                            className={"filter-field"}
+                            type="text" 
+                            label="Buscar" 
+                            value={filter} 
+                            onChange={(e) => {setFilter(e.target.value)}}
+                        /> 
                         {
-                            events.map((value) => {
-                                return(
-                                    <EventCard key={value.id} event={value}/>
-                                )
-                            })
+                            events.length > 0 ? (
+                                events.filter(value => value.name.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.description.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.city.toLowerCase().includes(filter.toLowerCase())).map((value) => {
+                                    return(
+                                        <EventCard key={value.id} event={value}/>
+                                    )
+                                })
+                            ) : (
+                                <p className={'default-message'}>Nenhum evento encontrado. Comece criando o seu evento.</p>
+                            )
                         }
                     </Container>
                 )

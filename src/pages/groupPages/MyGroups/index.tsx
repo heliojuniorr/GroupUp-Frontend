@@ -4,10 +4,12 @@ import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../serv
 import { useEffect, useState } from "react";
 import { GroupType, UserType } from "../../../interfaces/types";
 import { GroupCard } from "../../../components/GroupCard";
+import { TextField } from "@mui/material";
 
 export function MyGroups() {
     const { user } = useAuth()
     const [groups, setGroups] = useState<GroupType[]>([] as GroupType[])
+    const [filter, setFilter] = useState('')
 
     useEffect(() => {
         if(user) {
@@ -48,9 +50,18 @@ export function MyGroups() {
             {
                 user && (
                     <Container>
+                        <TextField 
+                            className={"filter-field"}
+                            type="text" 
+                            label="Buscar" 
+                            value={filter} 
+                            onChange={(e) => {setFilter(e.target.value)}}
+                        /> 
                         {
                             groups.length > 0 ? (
-                                groups.map((value) => {
+                                groups.filter(value => value.name.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.description.toLowerCase().includes(filter.toLowerCase()) || 
+                                value.city.toLowerCase().includes(filter.toLowerCase())).map((value) => {
                                     return(
                                         <GroupCard key={value.id} group={value}/>
                                     )
