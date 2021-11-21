@@ -15,6 +15,7 @@ export const Container = styled.main`
 
         @media only screen and (max-width: 480px) {
             flex-direction: column;
+            width: 100%;
         }
     }
 `

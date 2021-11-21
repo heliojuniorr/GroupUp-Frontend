@@ -8,7 +8,7 @@ export function useGroup() {
     const groupChild = (groupId?: string) => firebaseChild(firebaseRef(database), `groups/${groupId ?? ""}`)
     const updateFirebase = (updates: any) => firebaseUpdate(firebaseRef(database), updates) 
 
-    function createGroup(name: string, description: string, city: string, image: string) {
+    function createGroup(name: string, description: string, city: string, image: string, ageGroup: number) {
         const newGroupKey = firebasePush(groupChild()).key
 
         let updates: FirebaseGroupsType = {}
@@ -19,7 +19,8 @@ export function useGroup() {
                 description,
                 city,
                 members: [user.id],
-                image
+                image,
+                ageGroup
             };
             updateFirebase(updates)
             addGroupToUser(newGroupKey || '')
