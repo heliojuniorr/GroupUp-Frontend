@@ -13,7 +13,7 @@ export const Container = styled.main`
         margin-left: 1rem;
 
         @media only screen and (max-width: 480px) {
-            gap: 1rem;
+            margin-bottom: 1rem;
             width: 100%;
         }
     }
