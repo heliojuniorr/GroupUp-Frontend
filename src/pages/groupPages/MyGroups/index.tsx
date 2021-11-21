@@ -1,5 +1,5 @@
-import { useAuth } from "../../../hooks/useAuth";
 import { Container } from "./styles";
+import { useAuth } from "../../../hooks/useAuth";
 import { database, firebaseRef, firebaseChild, firebaseGet } from "../../../services/firebase"
 import { useEffect, useState } from "react";
 import { GroupType, UserType } from "../../../interfaces/types";
@@ -49,11 +49,15 @@ export function MyGroups() {
                 user && (
                     <Container>
                         {
-                            groups.map((value) => {
-                                return(
-                                    <GroupCard key={value.id} group={value}/>
-                                )
-                            })
+                            groups.length > 0 ? (
+                                groups.map((value) => {
+                                    return(
+                                        <GroupCard key={value.id} group={value}/>
+                                    )
+                                })
+                            ) : (
+                                <p className={'default-message'}>Nenhum grupo encontrado. Comece criando o seu grupo ou entrando em um existente.</p>
+                            )
                         }
                     </Container>
                 )

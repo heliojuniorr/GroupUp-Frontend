@@ -1,8 +1,8 @@
 import { useHistory } from "react-router"
 import { useAuth } from "../../hooks/useAuth"
-import { GroupCardParams } from "../../interfaces/types"
+import { GroupCardParams, images } from "../../interfaces/types"
 import { Container, GroupListItem } from "./styles"
-import logoImg from '../../assets/logo.svg'
+import logoImg from '../../assets/forest.svg'
 
 export function GroupCard({ group, disabled = false }: GroupCardParams) {
     const { user } = useAuth()
@@ -29,7 +29,7 @@ export function GroupCard({ group, disabled = false }: GroupCardParams) {
                                 </div> 
                             </div>
                             <div>
-                                <img src={logoImg} alt="Imagem" />
+                                <img src={images['forest']} alt="Imagem" />
                             </div> 
                         </GroupListItem>
                     </Container>

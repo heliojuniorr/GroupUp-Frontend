@@ -8,7 +8,7 @@ export const GroupListItem = styled.button`
     padding: 1rem;
     width: 100%;
     font-weight: 500;
-    background: var(--backgroundColor);
+    background-color: var(--backgroundColor);
     color: #fff;
 
     display: flex;
@@ -69,6 +69,6 @@ export const GroupListItem = styled.button`
     }
 
     img {
-        height: 2rem;
+        height: 3rem;
     }    
 `

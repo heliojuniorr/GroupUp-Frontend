@@ -20,6 +20,7 @@ export function Event() {
     const [members, setMembers] = useState<UserType[]>([] as UserType[])
     const [message, setMessage] = useState<MessageType>({} as MessageType)
     const [messages, setMessages] = useState<MessageType[]>([] as MessageType[])
+    const [isMember, setIsMember] = useState(false)
 
     function handleReturn() {
         history.goBack()
@@ -110,10 +111,12 @@ export function Event() {
                         setMessages(messagesTemp)
                     }
 
+                    let isMemberTemp = false
                     let membersTemp: UserType[] = []
                     parsedEvent.members.forEach((memberId) => {
                         firebaseGet(firebaseChild(dbRef, "users/" + memberId)).then((snapshot) => {
                             if(snapshot.exists()) {
+                                memberId === user.id && (isMemberTemp = true)
                                 const parsedMember: UserType = snapshot.val()
                                 membersTemp = [...membersTemp, parsedMember]
                             }
@@ -123,6 +126,7 @@ export function Event() {
 
                             if(parsedEvent?.members && parsedEvent.members[parsedEvent.members?.length - 1] === memberId) {
                                 setMembers(membersTemp)
+                                setIsMember(isMemberTemp)
                             }
                         }).catch(error => console.error(error))
                     })
@@ -144,31 +148,46 @@ export function Event() {
                         <Divider className='divider'/>
                         <ListsContainer>
                             <MembersCard members={members}/>
-                            <Chat>
-                                <p>Chat</p>
-                                <div>
-                                    {
-                                        messages.length > 0 ? (
-                                            messages.map((message, index) => {
-                                                return(
-                                                    <Message key={index} message={message}/>
+                            {
+                                isMember && (
+                                    <Chat>
+                                        <p>Chat</p>
+                                        <div>
+                                            {
+                                                messages.length > 0 ? (
+                                                    messages.map((message, index) => {
+                                                        if(messages.length > 100) {
+                                                            let startIndex = messages.length - 100 
+                                                            
+                                                            if(index >= startIndex) {
+                                                                return(
+                                                                    <Message key={index} message={message}/>
+                                                                )
+                                                            }
+                                                        }
+                                                        else {
+                                                            return(
+                                                                <Message key={index} message={message}/>
+                                                            )
+                                                        }
+                                                    })
+                                                ) : (
+                                                    <p>Sem mensagens.</p>
                                                 )
-                                            })
-                                        ) : (
-                                            <p>Sem mensagens.</p>
-                                        )
-                                    }
-                                    <TextField 
-                                        className={'message-input'}
-                                        required type="text" 
-                                        label="Mensagem" 
-                                        defaultValue={""}
-                                        value={message.content}
-                                        onChange={(e) => {handleMessageChange(e)}}
-                                        onKeyDown={(e) => {handleSendMessage(e)}}
-                                    />
-                                </div>
-                            </Chat>
+                                            }
+                                            <TextField 
+                                                className={'message-input'}
+                                                required type="text" 
+                                                label="Mensagem" 
+                                                defaultValue={""}
+                                                value={message.content}
+                                                onChange={(e) => {handleMessageChange(e)}}
+                                                onKeyDown={(e) => {handleSendMessage(e)}}
+                                            />
+                                        </div>
+                                    </Chat>
+                                )
+                            }
                         </ListsContainer>
                     </>
                 )

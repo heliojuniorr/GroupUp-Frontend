@@ -35,12 +35,16 @@ export function Group() {
     }
 
     function handleEntryGroup() {
-        if(!isMember && group) {
+        if(!isMember && group && user?.name) {
             addGroupToUser(group.id)
             addUserToGroup(group.id)
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
+            setIsMember(true)
+            setMembers([
+                ...members,
+                {
+                    name: user.name
+                }
+            ])
         }
     }
 
@@ -141,7 +145,7 @@ export function Group() {
                     let membersTemp: UserType[] = []
                     let isMemberTemp = false
 
-                    parsedGroup.members.forEach((memberId) => {
+                    parsedGroup.members?.forEach((memberId) => {
                         firebaseGet(firebaseChild(dbRef, "users/" + memberId)).then((snapshot) => {
                             if(snapshot.exists()) {
                                 memberId === user.id && (isMemberTemp = true)
@@ -226,31 +230,46 @@ export function Group() {
                                 </ul>
                             </EventList>
                             <MembersCard members={members}/>
-                            <Chat>
-                                <p>Chat</p>
-                                <div>
-                                    {
-                                        messages.length > 0 ? (
-                                            messages.map((message, index) => {
-                                                return(
-                                                    <Message key={index} message={message}/>
-                                                )
-                                            })
-                                        ) : (
-                                            <p>Sem mensagens.</p>
-                                        )
-                                    }
-                                    <TextField 
-                                        className={'message-input'}
-                                        required type="text" 
-                                        label="Mensagem" 
-                                        defaultValue={""}
-                                        value={message.content}
-                                        onChange={(e) => {handleMessageChange(e)}}
-                                        onKeyDown={(e) => {handleSendMessage(e)}}
-                                    />
-                                </div>
-                            </Chat>
+                            {
+                                isMember && (
+                                    <Chat>
+                                    <p>Chat</p>
+                                    <div>
+                                        {
+                                            messages.length > 0 ? (
+                                                messages.map((message, index) => {
+                                                    if(messages.length > 100) {
+                                                        let startIndex = messages.length - 100 
+                                                        
+                                                        if(index >= startIndex) {
+                                                            return(
+                                                                <Message key={index} message={message}/>
+                                                            )
+                                                        }
+                                                    }
+                                                    else {
+                                                        return(
+                                                            <Message key={index} message={message}/>
+                                                        )
+                                                    }
+                                                })
+                                            ) : (
+                                                <p>Sem mensagens.</p>
+                                            )
+                                        }
+                                        <TextField 
+                                            className={'message-input'}
+                                            required type="text" 
+                                            label="Mensagem" 
+                                            defaultValue={""}
+                                            value={message.content}
+                                            onChange={(e) => {handleMessageChange(e)}}
+                                            onKeyDown={(e) => {handleSendMessage(e)}}
+                                        />
+                                    </div>
+                                </Chat>
+                                )
+                            }
                         </ListsContainer>
                     </Container>
                 )

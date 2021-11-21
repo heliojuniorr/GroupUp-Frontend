@@ -1,3 +1,11 @@
+import logoImg from '../assets/logo.svg'
+import forestImg from '../assets/forest.svg'
+
+export type TextFieldType = {
+    value: string,
+    error: boolean
+}
+
 export type GroupType = {
     id: string,
     authorId: string,
@@ -5,6 +13,7 @@ export type GroupType = {
     description: string,
     city: string,
     members: string[],
+    image: string,
     events?: string[],
     messages?: FirebaseMessageType
 }
@@ -15,9 +24,15 @@ export type FirebaseGroupsType = Record<string, {
     description: string,
     city: string,
     members: string[],
+    image: string,
     events?: string[],
     messages?: FirebaseMessageType
 }>
+
+export type GroupListType = {
+    id: string,
+    name: string
+}
 
 export type UserType = {
     id?: string,
@@ -81,4 +96,9 @@ export type MessageType = {
 
 export type MessageParams = {
     message: MessageType,
+}
+
+export const images = {
+    default: logoImg,
+    forest: forestImg
 }

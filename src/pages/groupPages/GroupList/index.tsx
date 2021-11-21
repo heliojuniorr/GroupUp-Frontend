@@ -23,7 +23,8 @@ export function GroupList() {
                             name: value.name,
                             description: value.description,
                             city: value.city,
-                            members: value.members
+                            members: value.members,
+                            image: value.image
                         }
                     })
                     setGroups(parsedGroup)
@@ -41,11 +42,15 @@ export function GroupList() {
                 user && (
                     <Container>
                         {
-                            groups?.map((value) => {
-                                return(
-                                    <GroupCard key={value.id} group={value}/>
-                                )
-                            })
+                            groups.length > 0 ? (
+                                groups.map((value) => {
+                                    return(
+                                        <GroupCard key={value.id} group={value}/>
+                                    )
+                                })
+                            ) : (
+                                <p className={'default-message'}>Nenhum grupo encontrado. Comece criando o seu grupo agora mesmo.</p>
+                            )
                         }
                     </Container>
                 )

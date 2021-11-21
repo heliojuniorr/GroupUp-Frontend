@@ -1,12 +1,32 @@
 import { FirebaseGroupsType, FirebaseUserType, GroupType, UserType } from "../interfaces/types";
-import { firebaseChild, firebaseRef, database, firebaseGet, firebaseUpdate } from "../services/firebase";
+import { firebaseChild, firebaseRef, database, firebaseGet, firebaseUpdate, firebasePush } from "../services/firebase";
 import { useAuth } from "./useAuth";
 
 export function useGroup() {
     const { user } = useAuth()
-    
+    const userChild = firebaseChild(firebaseRef(database), `users/${user?.id}`)
+    const groupChild = (groupId?: string) => firebaseChild(firebaseRef(database), `groups/${groupId ?? ""}`)
+    const updateFirebase = (updates: any) => firebaseUpdate(firebaseRef(database), updates) 
+
+    function createGroup(name: string, description: string, city: string, image: string) {
+        const newGroupKey = firebasePush(groupChild()).key
+
+        let updates: FirebaseGroupsType = {}
+        if(user?.id) {
+            updates[`/groups/${newGroupKey}`] = {
+                authorId: user.id,
+                name,
+                description,
+                city,
+                members: [user.id],
+                image
+            };
+            updateFirebase(updates)
+            addGroupToUser(newGroupKey || '')
+        }
+    }
+      
     function addGroupToUser(groupKey: string) {        
-        const userChild = firebaseChild(firebaseRef(database), "users/" + user?.id)
         let updates: FirebaseUserType = {}
 
         firebaseGet(userChild).then((snapshot) => {
@@ -19,7 +39,7 @@ export function useGroup() {
                         name: user.name,
                         groups: parsedUser?.groups ? [...parsedUser.groups, groupKey] : [groupKey]
                     };
-                    firebaseUpdate(firebaseRef(database), updates)
+                    updateFirebase(updates)
                 }
             }
             else if(groupKey !== '' && user?.id){
@@ -27,16 +47,15 @@ export function useGroup() {
                     name: user.name,
                     groups: [groupKey]
                 };
-                firebaseUpdate(firebaseRef(database), updates)
+                updateFirebase(updates)
             }
         }).catch(error => console.error(error))
     }
 
     function addUserToGroup(groupKey: string) {        
-        const groupChild = firebaseChild(firebaseRef(database), "groups/" + groupKey)
         let updates: FirebaseGroupsType = {}
 
-        firebaseGet(groupChild).then((snapshot) => {
+        firebaseGet(groupChild(groupKey)).then((snapshot) => {
             if(snapshot.exists()) {
                 const parsedGroup: GroupType = snapshot.val()
                 
@@ -45,7 +64,7 @@ export function useGroup() {
                         ...parsedGroup,
                         members: parsedGroup?.members ? [...parsedGroup.members, user.id] : [user.id]
                     };
-                    firebaseUpdate(firebaseRef(database), updates)
+                    updateFirebase(updates)
                 }
             }
             else {
@@ -55,7 +74,6 @@ export function useGroup() {
     }
 
     function removeGroupFromUser(groupKey: string) {        
-        const userChild = firebaseChild(firebaseRef(database), "users/" + user?.id)
         let updates: FirebaseUserType = {}
 
         firebaseGet(userChild).then((snapshot) => {
@@ -69,7 +87,7 @@ export function useGroup() {
                         name: user.name,
                         groups: parsedUser?.groups ? [...parsedUser.groups] : []
                     };
-                    firebaseUpdate(firebaseRef(database), updates)
+                    updateFirebase(updates)
                 }
             }
             else {
@@ -79,10 +97,9 @@ export function useGroup() {
     }
 
     function removeUserFromGroup(groupKey: string) {        
-        const groupChild = firebaseChild(firebaseRef(database), "groups/" + groupKey)
         let updates: FirebaseGroupsType = {}
 
-        firebaseGet(groupChild).then((snapshot) => {
+        firebaseGet(groupChild(groupKey)).then((snapshot) => {
             if(snapshot.exists()) {
                 const parsedGroup: GroupType = snapshot.val()
                 
@@ -92,7 +109,7 @@ export function useGroup() {
                         ...parsedGroup,
                         members: parsedGroup?.members ? [...parsedGroup.members] : []
                     };
-                    firebaseUpdate(firebaseRef(database), updates)
+                    updateFirebase(updates)
                 }
             }
             else {
@@ -101,5 +118,12 @@ export function useGroup() {
         }).catch(error => console.error(error))
     }
 
-    return { addGroupToUser, addUserToGroup, removeGroupFromUser, removeUserFromGroup }
+    return { 
+        addGroupToUser, 
+        addUserToGroup, 
+        removeGroupFromUser, 
+        removeUserFromGroup, 
+        createGroup, 
+        updateFirebase 
+    }
 }
