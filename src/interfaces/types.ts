@@ -30,6 +30,7 @@ export type GroupType = {
     city: string,
     members: string[],
     image: string,
+    ageGroup: number,
     events?: string[],
     messages?: FirebaseMessageType
 }
@@ -41,6 +42,7 @@ export type FirebaseGroupsType = Record<string, {
     city: string,
     members: string[],
     image: string,
+    ageGroup: number,
     events?: string[],
     messages?: FirebaseMessageType
 }>

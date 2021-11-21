@@ -11,6 +11,7 @@ export function GroupList() {
     const { user } = useAuth()
     const [groups, setGroups] = useState<GroupType[]>([] as GroupType[])
     const [filter, setFilter] = useState('')
+    const [ageGroupFilter, setAgeGroupFilter] = useState<number>(0)
 
     useEffect(() => {
         if(user) {
@@ -26,7 +27,8 @@ export function GroupList() {
                             description: value.description,
                             city: value.city,
                             members: value.members,
-                            image: value.image
+                            image: value.image,
+                            ageGroup: value.ageGroup
                         }
                     })
                     setGroups(parsedGroup)
@@ -50,11 +52,19 @@ export function GroupList() {
                             value={filter} 
                             onChange={(e) => {setFilter(e.target.value)}}
                         /> 
+                        <TextField 
+                            className={"filter-field"}
+                            type="number" 
+                            label="Faixa etária" 
+                            value={ageGroupFilter} 
+                            onChange={(e) => {setAgeGroupFilter(Number(e.target.value))}}
+                        /> 
                         {
                             groups.length > 0 ? (
-                                groups.filter(value => value.name.toLowerCase().includes(filter.toLowerCase()) || 
+                                groups.filter(value => (value.name.toLowerCase().includes(filter.toLowerCase()) || 
                                     value.description.toLowerCase().includes(filter.toLowerCase()) || 
-                                    value.city.toLowerCase().includes(filter.toLowerCase())).map((value) => {
+                                    value.city.toLowerCase().includes(filter.toLowerCase())) && 
+                                    ((value.ageGroup == 0 && ageGroupFilter === 0) || (value.ageGroup > ageGroupFilter - 5 && value.ageGroup < ageGroupFilter + 5))).map((value) => {
                                     return(
                                         <GroupCard key={value.id} group={value}/>
                                     )

@@ -15,6 +15,7 @@ export function NewGroup() {
     const [city, setCity] = useState<TextFieldType>(textFieldDefaultValue)
     const [description, setDescription] = useState<TextFieldType>(textFieldDefaultValue)
     const [image, setImage] = useState<TextFieldType>(textFieldDefaultValue)
+    const [ageGroup, setAgeGroup] = useState<number>(0)
 
     const isEmpty = (value: string) => value === ''
 
@@ -38,11 +39,12 @@ export function NewGroup() {
         validateField(image, setImage) && (hasError = true)
 
         if(!hasError) {
-            createGroup(name.value, description.value, city.value, image.value)
+            createGroup(name.value, description.value, city.value, image.value, ageGroup)
             setName(textFieldDefaultValue)
             setCity(textFieldDefaultValue)
             setDescription(textFieldDefaultValue)
             setImage(textFieldDefaultValue)
+            setAgeGroup(0)
         }
     }
 
@@ -101,6 +103,12 @@ export function NewGroup() {
                                     })
                                 }
                             </TextField>
+                            <TextField 
+                                type="number" 
+                                label="Faixa etária" 
+                                value={ageGroup} 
+                                onChange={(e) => {setAgeGroup(Number(e.target.value) ?? 0)}}
+                            />
                         </div>
                     </Container>
                 )
