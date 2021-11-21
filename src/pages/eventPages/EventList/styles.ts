@@ -16,5 +16,9 @@ export const Container = styled.main`
 
     .filter-field {
         margin-left: 1rem;
+
+        @media only screen and (max-width: 480px) {
+            width: 100%;
+        }
     }
 `
